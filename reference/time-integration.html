@@ -1,0 +1,7 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>前向 Euler · 速查</title><link rel="stylesheet" href="../assets/style.css"></head><body><main>
+<header><div class="eyebrow">REFERENCE · 02</div><h1>前向 Euler</h1><p class="lead">本卡限定为恒定质量、直角坐标下的位置与速度更新。</p></header>
+<section><table><thead><tr><th>记号</th><th>含义</th></tr></thead><tbody><tr><td>Δt</td><td>一步的时间长度</td></tr><tr><td>上标 n / n + 1</td><td>当前步 / 下一步；这里是步编号</td></tr><tr><td>aⁿ</td><td>当前加速度：一维为 fⁿ/m；多分量求 M aⁿ = fⁿ</td></tr></tbody></table><div class="formula">x<sup>n+1</sup> = x<sup>n</sup> + Δt · v<sup>n</sup><br>v<sup>n+1</sup> = v<sup>n</sup> + Δt · a<sup>n</sup></div><p><strong>位置更新使用旧速度。</strong>先用旧状态算出两个新值，再写回。</p><pre><code>a = force / mass
+x_next = x + dt * v
+v_next = v + dt * a
+x, v = x_next, v_next</code></pre><p>代码是一维质点形式。前向 Euler 用当前变化率估计有限时间内的变化。</p><p>单位核对：s × m/s = m；s × m/s² = m/s。</p><p class="note">更换用于位置更新的速度时刻，会改变积分方法。</p></section>
+<footer><p>来源：<a href="https://phys-sim-book.github.io/simulation-with-optimization/discrete-space-and-time/time_integration.html">原书 §1.3</a>、<a href="https://phys-sim-book.github.io/simulation-with-optimization/discrete-space-and-time/explicit_time_integration.html">§1.4 · Forward Euler</a>。</p><p><a href="../lessons/0002-forward-euler.html">← 返回第二节</a> · <a href="state-and-equations.html">状态与方程速查</a></p></footer></main></body></html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>IPC 入门 · 距离、屏障与 CCD</title>
+  <link rel="stylesheet" href="../assets/style.css?v=4">
+  <script src="../assets/ipc-lesson.js?v=4" defer></script>
+</head>
+<body class="topic-lesson ipc-page">
+<main>
+  <nav class="lesson-topbar"><a href="../index.html#day-2026-10-16">← 学习时间轴</a><span>2026-10-16 · 02 / 02 · IPC</span></nav>
+  <header>
+    <div class="eyebrow">INCREMENTAL POTENTIAL CONTACT · 先懂防穿透</div>
+    <h1>IPC：靠得越近，<br>继续靠近就越“贵”</h1>
+    <p class="lead">IPC 把“不许穿过去”变成一个距离屏障。距离快到零时，屏障代价急剧变大，求解器就会寻找不穿透的运动。</p>
+    <p class="meta">约 12 分钟 · 不需要求导 · 今天不推屏障函数</p>
+  </header>
+
+  <section class="card key-idea ipc-key">
+    <h2>先记住一句话</h2>
+    <p class="big-idea"><strong>距离不能到 0；一步也不能跨过 0。</strong></p>
+    <p>屏障势能负责“终点别贴穿”，连续碰撞检测 CCD 负责“中间路径也别穿过去”。</p>
+  </section>
+
+  <section class="card contact-lab">
+    <div class="section-kicker">拖动体验</div>
+    <h2>01 / 把物体慢慢推向墙</h2>
+    <div class="contact-scene" aria-hidden="true">
+      <div id="ipc-object" class="ipc-object"></div>
+      <div class="ipc-wall"></div>
+      <div id="ipc-gap" class="ipc-gap"><span>距离</span></div>
+    </div>
+    <label class="distance-control" for="ipc-distance">物体与墙的距离 <output id="ipc-distance-value">70</output></label>
+    <input id="ipc-distance" class="wide-range" type="range" min="1" max="100" value="70">
+    <div class="barrier-readout">
+      <div><span>屏障强度</span><div class="barrier-meter"><i id="ipc-barrier-meter"></i></div></div>
+      <strong id="ipc-status">距离充足，屏障几乎不介入</strong>
+    </div>
+  </section>
+
+  <section>
+    <h2>02 / IPC 的三件事</h2>
+    <div class="ipc-three">
+      <article><span>1</span><h3>持续测距离</h3><p>关注可能接触的点、边和面之间还剩多少间隙。</p></article>
+      <article><span>2</span><h3>加入屏障势能</h3><p>靠近安全距离后代价上升；越接近零，上升越猛烈。</p></article>
+      <article><span>3</span><h3>用 CCD 限制步长</h3><p>检查整段运动路径，避免高速物体一步从墙这边跳到另一边。</p></article>
+    </div>
+    <p class="note"><strong>摩擦在哪里？</strong>法向屏障先阻止穿透；接触面切向的相对运动再由摩擦模型处理。</p>
+  </section>
+
+  <section class="card acronym-warning">
+    <h2>03 / 最容易混淆的两个缩写</h2>
+    <div class="acronym-grid">
+      <div><strong>IPC</strong><span>Incremental Potential Contact</span><p>一种接触处理思想：距离屏障、CCD、防穿透和摩擦。</p></div>
+      <div><strong>PIC</strong><span>Particle-In-Cell</span><p>一种粒子与网格的传输方式，经常出现在 MPM 里。</p></div>
+    </div>
+    <p class="meta">字母顺序很像，但它们处理的不是同一个问题。</p>
+  </section>
+
+  <section class="card checkpoint">
+    <h2>04 / 一题过关</h2>
+    <p>屏障已经保证时间步终点不穿透，为什么还需要 CCD？</p>
+    <div class="answer-buttons stacked-answers">
+      <button type="button" data-ipc-answer="path">因为运动中途仍可能一步跨过障碍物</button>
+      <button type="button" data-ipc-answer="render">因为 CCD 可以让画面更漂亮</button>
+    </div>
+    <p id="ipc-feedback" class="feedback" aria-live="polite"></p>
+    <a id="ipc-finish" class="primary-link disabled-link" href="../index.html" aria-disabled="true">完成今日专题，回到总览 →</a>
+  </section>
+
+  <footer>
+    <p>原书入口：<a href="https://phys-sim-book.github.io/boundary-treatments/distance-barrier-for-nonpenetration/signed_dists.html">IPC 与距离</a> · <a href="https://phys-sim-book.github.io/governing-equations/boundary-conditions-and-frictional-contact/barrier_potential.html">屏障势能</a> · <a href="https://phys-sim-book.github.io/boundary-treatments/filter-line-search/nonpenetration_traj.html">CCD 与防穿透路径</a></p>
+    <p class="meta">本页只建立接触直觉；点边/边边距离、势能导数和摩擦固定点迭代留到后续。</p>
+  </footer>
+</main>
+</body>
+</html>

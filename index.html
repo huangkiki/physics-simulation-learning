@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>物理仿真学习时间轴</title>
+  <link rel="stylesheet" href="assets/style.css?v=3">
+  <script src="assets/today-learning.js?v=3" defer></script>
+</head>
+<body class="focus-page">
+<main class="focus-shell">
+  <header class="focus-hero">
+    <div class="eyebrow">PHYSICS-BASED SIMULATION · 学习时间轴</div>
+    <div class="focus-hero-grid">
+      <div>
+        <h1>按时间记录<br><span>学过什么</span></h1>
+        <p class="lead">课程按日期排列，进度按预计学习分钟数累计。先知道自己走到哪里，再继续今天的 MPM 与 IPC。</p>
+      </div>
+      <div class="today-progress" aria-live="polite">
+        <span>累计学习进度</span>
+        <strong id="overall-progress-number">0 / 80 分钟</strong>
+        <div class="progress-track"><i id="overall-progress-bar"></i></div>
+        <small id="overall-progress-text">从昨天的基础开始</small>
+      </div>
+    </div>
+  </header>
+
+  <section class="timeline" aria-label="按日期排列的学习记录">
+    <article class="timeline-day current-day" id="day-2026-10-16">
+      <div class="timeline-rail" aria-hidden="true"><i></i></div>
+      <div class="timeline-content">
+        <header class="day-header">
+          <div><span class="date-label">2026 年 10 月 16 日 · 今天</span><h2>MPM 与 IPC：材料运动和接触</h2><p>今天只建立流程直觉，不推 Newton、矩阵和 Hessian。</p></div>
+          <div class="day-progress"><strong data-day-progress="2026-10-16">0 / 24 分钟</strong><span data-day-status="2026-10-16">2 节待学习</span></div>
+        </header>
+
+        <div class="focus-map" aria-label="今天的学习顺序">
+          <article class="topic-card topic-mpm" data-progress-card="mpm">
+            <div class="topic-number">01</div>
+            <div>
+              <div class="topic-title-line"><span class="topic-pill">材料怎么动</span><span class="completion-mark" data-completion="mpm">未完成</span></div>
+              <h3>MPM：粒子记材料，网格算运动</h3>
+              <p>只抓住一条循环：<strong>P2G → 网格更新 → G2P → 粒子前进</strong>。</p>
+              <ul class="clean-list"><li>粒子保存质量、速度和材料状态</li><li>背景网格临时计算力和速度</li><li>预计 12 分钟</li></ul>
+              <div class="card-actions"><a class="primary-link" href="lessons/0006-mpm-intuition.html">开始 MPM →</a><button class="completion-toggle" type="button" data-progress-toggle="mpm">标记完成</button></div>
+            </div>
+          </article>
+
+          <div class="topic-connector" aria-hidden="true"><span>然后</span></div>
+
+          <article class="topic-card topic-ipc" data-progress-card="ipc">
+            <div class="topic-number">02</div>
+            <div>
+              <div class="topic-title-line"><span class="topic-pill">接触怎么管</span><span class="completion-mark" data-completion="ipc">未完成</span></div>
+              <h3>IPC：靠近就变“贵”，因此不会穿模</h3>
+              <p>只抓住三个动作：<strong>测距离 → 加屏障 → 用 CCD 限制步长</strong>。</p>
+              <ul class="clean-list"><li>屏障阻止表面贴穿</li><li>CCD 检查整段运动路径</li><li>预计 12 分钟</li></ul>
+              <div class="card-actions"><a class="primary-link" href="lessons/0007-ipc-intuition.html">继续 IPC →</a><button class="completion-toggle" type="button" data-progress-toggle="ipc">标记完成</button></div>
+            </div>
+          </article>
+        </div>
+
+        <section class="one-picture card compact-comparison">
+          <div class="section-kicker">今天要分清</div>
+          <div class="role-comparison">
+            <div><span class="role-label mpm-label">MPM</span><strong>负责物体内部</strong><p>材料在哪里、怎么变形、速度怎样更新。</p></div>
+            <div class="plus-sign">+</div>
+            <div><span class="role-label ipc-label">IPC</span><strong>负责物体接触</strong><p>表面何时靠近、怎样避免相互穿透。</p></div>
+            <div class="equals-sign">=</div>
+            <div class="result-role"><strong>可信的运动与接触</strong><p>它们解决不同问题，可以出现在同一套仿真中。</p></div>
+          </div>
+        </section>
+      </div>
+    </article>
+
+    <article class="timeline-day" id="day-2026-10-15">
+      <div class="timeline-rail" aria-hidden="true"><i></i></div>
+      <div class="timeline-content">
+        <header class="day-header">
+          <div><span class="date-label">2026 年 10 月 15 日 · 昨天</span><h2>仿真基础：从状态到隐式求解</h2><p>昨天的内容已经重新排成五个独立小台阶；看不懂 Newton 不影响今天先学 MPM 和 IPC。</p></div>
+          <div class="day-progress"><strong data-day-progress="2026-10-15">0 / 56 分钟</strong><span data-day-status="2026-10-15">5 节待复习</span></div>
+        </header>
+
+        <div class="history-grid">
+          <article class="history-card" data-progress-card="base-01"><div class="history-card-top"><span>01 · 约 12 分钟</span><span class="completion-mark" data-completion="base-01">未完成</span></div><h3>物体怎样变成状态和方程</h3><p>认识位置、速度、质量以及计算机里的状态。</p><div class="card-actions"><a href="lessons/0001-state-to-equations.html">打开课程 →</a><button class="completion-toggle" type="button" data-progress-toggle="base-01">标记完成</button></div></article>
+          <article class="history-card" data-progress-card="base-02"><div class="history-card-top"><span>02 · 约 12 分钟</span><span class="completion-mark" data-completion="base-02">未完成</span></div><h3>Forward Euler：把运动变成一次更新</h3><p>用当前速度和力，算出下一小步。</p><div class="card-actions"><a href="lessons/0002-forward-euler.html">打开课程 →</a><button class="completion-toggle" type="button" data-progress-toggle="base-02">标记完成</button></div></article>
+          <article class="history-card" data-progress-card="base-03"><div class="history-card-top"><span>03 · 约 12 分钟</span><span class="completion-mark" data-completion="base-03">未完成</span></div><h3>Symplectic Euler：先更新谁？</h3><p>比较使用旧速度和新速度更新位置的差别。</p><div class="card-actions"><a href="lessons/0003-symplectic-euler.html">打开课程 →</a><button class="completion-toggle" type="button" data-progress-toggle="base-03">标记完成</button></div></article>
+          <article class="history-card" data-progress-card="base-04"><div class="history-card-top"><span>04 · 约 12 分钟</span><span class="completion-mark" data-completion="base-04">未完成</span></div><h3>Implicit Euler：为什么需要解方程</h3><p>下一时刻的状态和下一时刻的力互相依赖。</p><div class="card-actions"><a href="lessons/0004-implicit-euler.html">打开课程 →</a><button class="completion-toggle" type="button" data-progress-toggle="base-04">标记完成</button></div></article>
+          <article class="history-card gentle-card" data-progress-card="base-05"><div class="history-card-top"><span>05 · 约 8 分钟</span><span class="completion-mark" data-completion="base-05">未完成</span></div><h3>Newton：反复修正同一个猜测</h3><p>只理解“猜测 → 看残差 → 修正”，公式可以以后再学。</p><div class="card-actions"><a href="lessons/0005-newton-iteration.html">打开简化版 →</a><button class="completion-toggle" type="button" data-progress-toggle="base-05">标记完成</button></div></article>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <footer><p class="meta">进度保存在这个首页的本机浏览器中。完成按钮可以再次点击撤销；课程内容和完成状态互不绑定，便于按自己的节奏学习。</p></footer>
+</main>
+</body>
+</html>

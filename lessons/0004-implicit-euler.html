@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>04 · 为什么隐式积分需要解方程？</title><link rel="stylesheet" href="../assets/style.css"><script src="../assets/implicit-step.js" defer></script><script src="../assets/animation-controls.js" defer></script></head><body><main><nav class="lesson-topbar"><a href="../index.html#day-2026-10-15">← 学习时间轴</a><span>2026-10-15 · 04 / 05</span></nav>
+<header><div class="eyebrow">PHYSICS-BASED SIMULATION · 伴读 04</div><h1>为什么隐式积分<br>需要解方程？</h1><p class="lead">今天只抓住一件事：当力取决于下一时刻的位置，新位置和新速度就需要一起确定。用一个一维弹簧，把这组方程解出来。</p><p class="meta">对应原书 §1.5 的 Backward Euler 方程 · 建议 10–15 分钟</p></header>
+<section><h2>01 / 换一个力：弹簧会随位置改变</h2>
+<p class="note"><strong>观看提示：</strong>先观察位置、力和速度怎样变化。画面中的 x(t) = cos(2t) 是本例提前给出的精确运动参照；它的含义与数字 2 的来源见<a href="#spring-reference">第 05 部分</a>。计算本节的后向 Euler，只需要下面的弹簧力关系。</p>
+<figure class="lesson-animation" data-animation>
+<video controls loop playsinline muted preload="metadata" poster="../assets/animations/spring-motion-video-poster.png" width="900" height="660" aria-label="弹簧运动动画播放器">
+<source src="../assets/animations/spring-motion.webm" type="video/webm">
+<source src="../assets/animations/spring-motion.mp4" type="video/mp4">
+<a href="../assets/animations/spring-motion.mp4">打开弹簧运动视频</a>
+</video>
+<div class="animation-timeline"><label for="spring-motion-progress">进度</label><input id="spring-motion-progress" data-progress type="range" min="0" max="1" step="0.05" value="0" disabled><output data-time>0:00 / --:--</output></div>
+<div class="animation-actions">
+<button type="button" data-play-toggle aria-label="播放弹簧运动">播放</button>
+<button type="button" data-restart>回到开头</button>
+<label class="playback-rate">速度 <select data-playback-rate aria-label="弹簧运动播放速度"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
+<a href="../assets/animations/spring-motion.mp4" target="_blank" rel="noopener">打开视频</a>
+</div>
+<p class="player-help meta">点击播放；暂停会停在当前画面。拖动下方进度条可定位，速度选项只改变观看速度。</p>
+<p class="player-status meta" aria-live="polite"></p>
+<figcaption><strong>先看运动：</strong>橙色是力，绿色是速度。留意物体经过平衡位置时，力与速度分别是多少。这段动画使用理想弹簧连续运动的精确解，称为“解析解”；播放已放慢。它用于提供对照，后向 Euler 的计算过程在下一段动画中。</figcaption>
+</figure><p>前面的恒力例子中，合力始终是 6 N。现在让质量为 <strong>1 kg</strong> 的节点沿直线连接一根弹簧，刚度 <strong>k = 4 N/m</strong>。</p><p>令 x 表示节点相对平衡位置的偏移，向右为正。弹簧力写成：</p><div class="formula">f(x) = −kx = −4x</div><p>例如 x = 1 m 时，力为 −4 N，即向左拉；x = 0.5 m 时，力为 −2 N。这里的 <strong>f(x)</strong> 表示“根据位置 x 算出力”。</p><p class="note">负号说明力指向平衡位置。k 的单位为 N/m，乘以偏移 x（m）以后得到力（N）。</p></section>
+<section><h2>02 / 把力也放到下一时刻</h2><figure class="lesson-animation" data-animation>
+<video controls loop playsinline muted preload="metadata" poster="../assets/animations/implicit-solve-video-poster.png" width="900" height="660" aria-label="隐式 Euler 求解流程动画播放器">
+<source src="../assets/animations/implicit-solve.webm" type="video/webm">
+<source src="../assets/animations/implicit-solve.mp4" type="video/mp4">
+<a href="../assets/animations/implicit-solve.mp4">打开隐式 Euler 求解流程视频</a>
+</video>
+<div class="animation-timeline"><label for="implicit-solve-progress">进度</label><input id="implicit-solve-progress" data-progress type="range" min="0" max="1" step="0.05" value="0" disabled><output data-time>0:00 / --:--</output></div>
+<div class="animation-actions">
+<button type="button" data-play-toggle aria-label="播放隐式 Euler 求解流程">播放</button>
+<button type="button" data-restart>回到开头</button>
+<label class="playback-rate">速度 <select data-playback-rate aria-label="隐式 Euler 求解流程播放速度"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
+<a href="../assets/animations/implicit-solve.mp4" target="_blank" rel="noopener">打开视频</a>
+</div>
+<p class="player-help meta">点击播放；暂停会停在当前画面。拖动下方进度条可定位，速度选项只改变观看速度。</p>
+<p class="player-status meta" aria-live="polite"></p>
+<figcaption><strong>再看求解：</strong>固定当前 x = 1 m、v = 0，Δt = 0.1 s。候选值变化表示同一步内的试算；最终用代入法解出新位置。残差是“候选位置 − 回算位置”。</figcaption>
+</figure>
+<div id="euler-review">
+<h3>先回顾：三种 Euler 各用哪个时刻的量？</h3>
+<p>下面统一使用“旧”和“新”，表示同一步开始和结束的状态；Δt 是步长，m 是质量。限定为本例这种<strong>质量恒定、力只依赖位置</strong>的模型，f(位置)/m 就是该位置对应的加速度。</p>
+<h3>① 前向 Euler：用旧状态算这一步</h3>
+<div class="formula">新速度 = 旧速度 + Δt × f(<strong>旧位置</strong>)/m<br>新位置 = 旧位置 + Δt × <strong>旧速度</strong></div>
+<p>两个右侧都用旧状态。即使程序先算出了新速度，更新位置时仍要保留并使用旧速度。</p>
+<h3>② 辛 Euler：先更新速度，再用新速度更新位置</h3>
+<div class="formula">新速度 = 旧速度 + Δt × f(<strong>旧位置</strong>)/m<br>新位置 = 旧位置 + Δt × <strong>新速度</strong></div>
+<p>这是前面学过的“先速度、后位置”版本。力仍由旧位置计算，新速度算出来后，就能直接更新位置。</p>
+<h3>③ 后向 Euler：力也由新位置计算</h3>
+<div class="formula">新速度 = 旧速度 + Δt × f(<strong>新位置</strong>)/m<br>新位置 = 旧位置 + Δt × <strong>新速度</strong></div>
+<p><strong>后向 Euler（Backward Euler）</strong>是一种隐式积分方法：本例的新位置和新速度需要一起求解。</p>
+<table><thead><tr><th>方法</th><th>用哪个位置算力？</th><th>用哪个速度更新位置？</th></tr></thead><tbody>
+<tr><td>前向 Euler</td><td>旧位置</td><td>旧速度</td></tr>
+<tr><td>辛 Euler</td><td>旧位置</td><td>新速度</td></tr>
+<tr><td>后向 Euler</td><td>新位置</td><td>新速度</td></tr>
+</tbody></table>
+<details id="euler-spring-comparison"><summary>代入同一个弹簧，看看第一步的数字</summary>
+<p>统一从旧 x = 1 m、旧 v = 0 开始，m = 1 kg、f(x) = −4x、Δt = 0.1 s。前向与辛 Euler 都先得到旧力 −4 N、旧加速度 −4 m/s²，因此新速度都为 0 + 0.1 × (−4) = −0.4 m/s。</p>
+<div class="formula">前向：新位置 = 1 + 0.1 × 0 = 1 m<br>辛：新位置 = 1 + 0.1 × (−0.4) = 0.96 m</div>
+<p>前向 Euler 这一步的位置没有变，是因为位置公式使用了值为 0 的旧速度；连续模型中的物体在这段时间内已经发生位移。</p>
+<p>后向 Euler 则要联立 v<sub>new</sub> = −0.4x<sub>new</sub> 与 x<sub>new</sub> = 1 + 0.1v<sub>new</sub>。下一部分逐步解这两条式子，结果汇总如下：</p>
+<table><thead><tr><th>方法</th><th>新位置（m）</th><th>新速度（m/s）</th></tr></thead><tbody>
+<tr><td>前向 Euler</td><td>1.000000</td><td>−0.400000</td></tr>
+<tr><td>辛 Euler</td><td>0.960000</td><td>−0.400000</td></tr>
+<tr><td>后向 Euler</td><td>0.961538</td><td>−0.384615</td></tr>
+</tbody></table>
+<p class="note">这些是各方法定义的一步数值结果。它们与连续模型精确解的差别，见第 05 部分；不能仅凭“用了新值”就判定一定更准确。</p>
+</details>
+<p class="source">回顾来源：<a href="https://phys-sim-book.github.io/simulation-with-optimization/discrete-space-and-time/explicit_time_integration.html">原书 §1.4，前向与辛 Euler</a>；也可以返回<a href="0002-forward-euler.html">第二节</a>、<a href="0003-symplectic-euler.html">第三节</a>或查看<a href="../reference/euler-methods.html">三种 Euler 速查</a>。</p>
+</div>
+<p>这里发生了互相依赖：</p><div class="steps"><span>新位置</span> → <span>新弹簧力</span> → <span>新速度</span> → <span>新位置</span></div><p><strong>我们要解出一对同时满足两个式子的新位置、新速度。</strong>方程右侧出现了还没有求出的未知量，这就是本例“隐式”的含义。名称里的“后向”对应从下一时刻回看这一段时间的差分方式；仿真仍然从当前时刻推进到下一时刻。</p><p class="source">公式与状态依赖关系来自 <a href="https://phys-sim-book.github.io/simulation-with-optimization/discrete-space-and-time/implicit_time_integration.html">原书 §1.5 · Backward Euler，式 1.5.1</a>。弹簧参数和下面的手算例子是教学构造。</p></section>
+<section class="card"><h2>03 / 用代入法，把它解出来</h2><p>当前 x = <strong>1 m</strong>、v = <strong>0 m/s</strong>，步长 Δt = <strong>0.1 s</strong>。下面所有数字均使用对应的 SI 单位。</p><p>先把已知量代入两个更新式：</p><div class="formula">v<sub>new</sub> = 0 + 0.1 × (−4x<sub>new</sub>) = −0.4x<sub>new</sub><br>x<sub>new</sub> = 1 + 0.1v<sub>new</sub></div><p>第一行已经把新速度表示成了新位置的函数。将它代入第二行：</p><div class="formula">x<sub>new</sub> = 1 + 0.1 × (−0.4x<sub>new</sub>)<br>x<sub>new</sub> = 1 − 0.04x<sub>new</sub></div><p>把右边含新位置的项移到左边：</p><div class="formula">1.04x<sub>new</sub> = 1<br>x<sub>new</sub> = 1/1.04 ≈ <strong>0.961538 m</strong><br>v<sub>new</sub> = −0.4/1.04 ≈ <strong>−0.384615 m/s</strong></div><p>这个结果同时满足位置更新和速度更新。在新的位置，弹簧力约为 −3.846154 N。</p><details><summary>和上一节的辛 Euler 有什么区别？</summary><p>同一初始状态、相同步长下，辛 Euler 先用旧位置 1 m 算出力 −4 N，再得到新速度 −0.4 m/s、新位置 0.96 m。后向 Euler 用求解得到的新位置计算本步所用的力。</p><p>区别落在<strong>力在哪个状态计算</strong>。本节后向 Euler 的数值结果也仍然是时间离散的近似。</p></details></section>
+<section class="card"><h2>04 / 候选位置能让两条式子对上吗？</h2><p>先试一个新位置 z，用速度方程算出 v，再用位置方程回算一次。如果回算的位置和 z 相同，两条关系就一致。</p><label for="implicit-guess">候选新位置 z（m） <input id="implicit-guess" type="number" step="any" value="1" required></label><div class="quiz-row"><button type="button" data-guess="1">试 1.00 m</button><button type="button" data-guess="0.96">试 0.96 m</button><button type="button" id="solve-implicit">解这条线性方程</button></div>
+<table aria-live="polite"><thead><tr><th>计算关系</th><th>代入结果</th></tr></thead><tbody><tr><td>新力 f(z) = −4z</td><td><span id="guess-force">−4.000000</span> N</td></tr><tr><td>新速度 v = −0.4z</td><td><span id="guess-velocity">−0.400000</span> m/s</td></tr><tr><td>回算位置 1 + 0.1v</td><td><span id="guess-position">0.960000</span> m</td></tr><tr><td>残差 r = z − 回算位置</td><td><span id="guess-residual">0.040000</span> m</td></tr></tbody></table><p id="implicit-message" class="feedback" aria-live="polite">候选位置 1 m 回算后为 0.96 m，相差 0.04 m，两个式子还没有对上。</p>
+<p>这里的“残差”就是把候选值代入离散方程后剩下的差。本例可写成 <strong>r(z) = 1.04z − 1</strong>。残差接近零，说明方程满足得好。</p>
+<p class="note"><strong>残差小，与真实运动误差小，是两个问题。</strong>把近似方程解得很充分，仍然可能留下时间离散误差。</p></section>
+<section id="spring-reference"><h2>05 / 解出来了，物理上就精确了吗？</h2>
+<p>前面已经建立的关系是：</p>
+<div class="formula">f = −kx，a = f/m<br>所以 a = −(k/m)x，本例为 a = −4x</div>
+<p>这告诉我们<strong>在某个位置时，加速度是多少</strong>。要得到“任意时刻的位置”，还需要结合初始位置和初始速度，求解连续运动方程。这一步此前没有展开，不能直接当作已经学过的结论。</p>
+<p class="note"><strong>下面提前给出精确解，作为检查误差的参照。</strong>适用条件：无阻尼、只有线性弹簧力作用于运动方向，m = 1 kg、k = 4 N/m，从 x = 1 m、v = 0 开始。本节的 Euler 手算不依赖余弦公式；想了解其来源，可以展开下面的求导说明。</p>
+<h3>先读懂 x(t) = cos(2t)</h3>
+<p><strong>x(t)</strong> 读作“t 时刻的位置”，不是 x 乘以 t。这里 t 用秒、x 用米记数；<strong>cos</strong> 是余弦函数，数值会平滑地在 1 和 −1 之间往复变化。这条公式描述物体从右侧 1 m 处出发，经过平衡位置，到达左侧 −1 m，再返回。</p>
+<div class="formula">x(t) = cos(2t)<br>x(0.1) = cos(0.2) ≈ 0.980067 m</div>
+<p>括号里的 <strong>2</strong> 控制往复变化的快慢。它由本例的质量和刚度决定，来源见下方补充；它不表示每秒往复两次。</p>
+<details id="cosine-values"><summary>展开：把几个时刻代进去，和动画对照</summary>
+<table><thead><tr><th>时间 t（s，约）</th><th>位置 x(t)（m）</th><th>对应画面</th></tr></thead><tbody>
+<tr><td>0</td><td>1</td><td>右侧最远处</td></tr>
+<tr><td>0.785</td><td>0</td><td>经过平衡位置，向左</td></tr>
+<tr><td>1.571</td><td>−1</td><td>左侧最远处</td></tr>
+<tr><td>2.356</td><td>0</td><td>经过平衡位置，向右</td></tr>
+<tr><td>3.142</td><td>1</td><td>回到右侧，完成一次往复</td></tr>
+</tbody></table>
+<p>这里 cos 的输入采用<strong>弧度</strong>，计算器需选择 RAD。弧度也是表示角度的方法，一整圈是 2π 弧度，约为 6.283。cos 的输入增加 2π，数值重复一轮；本例输入是 2t，所以一次往复需要 π 秒，约 3.142 秒。</p>
+<p class="meta">表中时间作了四舍五入；动画也放慢了播放，播放器的观看秒数不等于模型中的物理时间。</p>
+</details>
+<details id="spring-frequency"><summary>进阶选读：数字 2 从哪里来？为什么有 √(k/m)？</summary>
+<p><strong>这里补充一个此前未讲过的求导步骤。</strong>“位置对时间求一次导数得到速度，再求一次得到加速度”。如果求导还不熟悉，可以先保留这个问题，不影响前面的 Euler 计算。</p>
+<p>先用一个待定的正数 c 表示往复变化的快慢，试着用 x(t) = cos(ct) 描述本例从 1 m 处静止释放的运动。以下按秒、米记数。余弦和正弦的求导规则给出：</p>
+<div class="formula">位置：x(t) = cos(ct)<br>↓ 对时间求导<br>速度：v(t) = −c sin(ct)<br>↓ 再对时间求导<br>加速度：a(t) = −c² cos(ct) = −c²x(t)</div>
+<p>这里 sin 是正弦函数。具体规则是：cos(ct) 求导得到 −c sin(ct)，sin(ct) 求导得到 c cos(ct)；里面的 ct 使每次求导都带出一个 c，连续两次就出现 c²。</p>
+<p>弹簧定律要求 a = −(k/m)x；这条余弦轨迹算出的加速度为 a = −c²x。要让它们在整个运动过程中一致，就需要：</p>
+<div class="formula">c² = k/m<br>c = √(k/m)<br>本例：c = √(4/1) = 2</div>
+<p><strong>平方根来自对 c² = k/m 求解。</strong>这个 c 通常写作 ω（omega），称为角频率，本例为 2 rad/s。带上单位，位置公式完整写作 x(t) = (1 m) cos[(2 rad/s)t]。</p>
+<p>还要检查起点：t = 0 时，cos(0) = 1、sin(0) = 0，于是 x(0) = 1 m、v(0) = 0。这样就验证了 x(t) = cos(2t) 同时符合运动方程和本例的初始条件。改变初始条件，位置公式也要相应改变。</p>
+<p class="source">补充阅读：<a href="https://openstax.org/books/university-physics-volume-1/pages/15-1-simple-harmonic-motion">OpenStax《University Physics》§15.1</a>，位置、速度、加速度关系及角频率式 15.9。本例数字由这些关系代入得到。</p>
+</details>
+<h3>再与这一步的结果比较</h3>
+<p>在同一个 t = 0.1 s 时刻：</p>
+<table><thead><tr><th>计算方式</th><th>位置（m）</th><th>速度（m/s）</th></tr></thead><tbody>
+<tr><td>后向 Euler，一步 Δt = 0.1 s</td><td>0.961538</td><td>−0.384615</td></tr>
+<tr><td>连续模型的精确解</td><td>0.980067</td><td>−0.397339</td></tr>
+</tbody></table>
+<p>精确速度由上面的 v(t) = −2sin(2t) 代入得到。<strong>离散方程可以解得很准确，但它描述的一步运动仍有时间离散误差。</strong>这里的“精确”限定于上述理想弹簧模型。</p>
+<details><summary>进阶选读：为什么这个无阻尼模型也会越算越不动？</summary><p>该模型没有物理阻尼。后向 Euler 却会让每一步机械能乘上 1/(1 + 4Δt²)：这是数值耗散。此处的具体关系只适用于我们定义的线性弹簧模型。</p></details>
+<p>今天把两项工作分开记：<strong>时间积分先规定这一步要满足的离散关系，求解方法再找出满足这些关系的数值。</strong></p></section>
+<section class="card"><h2>06 / 为什么接下来要学 solver？</h2><p>本例的残差 1.04z − 1 对未知量 z 是线性的，移项和除法就能求解。更多节点会形成联立方程；如果力对位置的关系是非线性的，求解过程还会更复杂。</p><p><a href="0005-newton-iteration.html">下一节用一个非线性弹簧解释 <strong>Newton 迭代</strong></a>：从候选解出发，利用残差和斜率逐次修正。</p><p><strong>先用一句话检查理解：</strong>这里的新位置还不知道，为什么新速度也不能像恒力例子那样直接算出来？把你卡住的地方也一起告诉我。</p></section>
+<section id="contact-roadmap"><details><summary>延伸阅读：教材里有没有“面接触”？</summary>
+<p><strong>有。</strong>如果你关心物体表面之间如何接触、承受法向作用力并产生摩擦，教材会从不穿透条件逐步讲到接触区域上的力，以及三维三角网格表面的计算。</p>
+<table><thead><tr><th>想弄清的问题</th><th>对应阅读入口</th></tr></thead><tbody>
+<tr><td>物体怎样避免穿过地面？</td><td><a href="https://phys-sim-book.github.io/simulation-with-optimization/optimization-framework/contact.html">§2.3 接触</a>；<a href="https://phys-sim-book.github.io/boundary-treatments/distance-barrier-for-nonpenetration/dist_barrier_formulation.html">§7.2 距离屏障</a></td></tr>
+<tr><td>接触以后为何能支撑、滑动或停住？</td><td><a href="https://phys-sim-book.github.io/boundary-treatments/frictional-contact/friction.html">第 9 章 摩擦接触</a></td></tr>
+<tr><td>一片接触区域上的力怎样进入运动方程？</td><td><a href="https://phys-sim-book.github.io/governing-equations/boundary-conditions-and-frictional-contact/normal_contact.html">§18.2 接触区域与法向作用力的边界积分</a></td></tr>
+<tr><td>连续边界怎样变成可计算的节点和边？</td><td><a href="https://phys-sim-book.github.io/finite-element-method/piecewise-linear-boundaries/obstacle_contact.html">§20.2 固体与障碍物接触</a>；<a href="https://phys-sim-book.github.io/finite-element-method/piecewise-linear-boundaries/self_contact.html">§20.3 自接触</a>，此处主要从二维展开</td></tr>
+<tr><td>三维网格的表面接触怎样计算？</td><td><a href="https://phys-sim-book.github.io/finite-element-method/3d-frictional-self-contact/barrier_and_dist.html">§24.1 点—三角形、边—边距离与屏障势</a>；<a href="https://phys-sim-book.github.io/finite-element-method/3d-frictional-self-contact/friction.html">§24.3 三维摩擦</a></td></tr>
+</tbody></table>
+<p>“表面接触”在计算时可以拆成许多局部几何关系。第 24 章把表面表示成三角网格，利用点—三角形、边—边关系构造接触项，并使用与表面三角形面积有关的权重。看到“点”字，并不意味着整个接触区域只用一个点代表。</p>
+<p class="note">如果关注的是“一片接触区域各处压强有多大、接触面积如何随载荷变化”，还需要结合材料变形与接触力求解。几何距离计算只是其中一环。教材的接触主线是 IPC（Incremental Potential Contact，增量势接触）；这与接触力学中的具体压强分布问题需要分别理解。</p>
+<p>当前先把时间积分与求解的关系学清楚；上面的章节作为后续接触学习入口，无需现在跳读全部公式。</p>
+</details></section>
+<footer><p><a href="0003-symplectic-euler.html">← 上一节：旧速度与新速度</a> · <a href="../reference/implicit-euler.html">隐式 Euler 速查</a></p><p><a href="0005-newton-iteration.html">下一节：Newton 怎样把残差推到零？ →</a></p><p>原文阅读：<a href="https://phys-sim-book.github.io/simulation-with-optimization/discrete-space-and-time/implicit_time_integration.html">§1.5 隐式时间积分</a>，本节先读到式 1.5.2；Newton 部分在下一张卡展开。</p><p class="meta">2026-10-15 核对来源。交互按本页定义的线性方程计算，精确参照来自该弹簧模型的解析解。</p></footer>
+</main></body></html>

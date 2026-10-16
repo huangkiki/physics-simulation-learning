@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>三种 Euler 方法 · 速查</title><link rel="stylesheet" href="../assets/style.css"></head><body><main>
+<header><div class="eyebrow">REFERENCE · 03–04</div><h1>三种 Euler 方法</h1><p class="lead">限定为恒定质量、力只依赖位置的一维模型。x、v 表示旧状态，new 表示同一步的新状态，Δt 为步长。</p></header>
+<section><h2>前向 Euler</h2><div class="formula">v<sub>new</sub> = v + Δt · f(x)/m<br>x<sub>new</sub> = x + Δt · v</div><p>用旧位置算力，用旧速度更新位置。计算时需要保留旧速度。</p>
+<h2>辛 Euler：先速度、后位置</h2><div class="formula">v<sub>new</sub> = v + Δt · f(x)/m<br>x<sub>new</sub> = x + Δt · v<sub>new</sub></div><p>仍用旧位置算力；新速度得到后，立即用于位置更新。</p>
+<h2>后向 Euler</h2><div class="formula">v<sub>new</sub> = v + Δt · f(x<sub>new</sub>)/m<br>x<sub>new</sub> = x + Δt · v<sub>new</sub></div><p>使用新位置对应的力，以及新速度。对于本节的位置相关力，通常需要求解联立方程。</p>
+<table><thead><tr><th>方法</th><th>算力用的位置</th><th>更新位置用的速度</th></tr></thead><tbody><tr><td>前向 Euler</td><td>旧位置</td><td>旧速度</td></tr><tr><td>辛 Euler</td><td>旧位置</td><td>新速度</td></tr><tr><td>后向 Euler</td><td>新位置</td><td>新速度</td></tr></tbody></table>
+<p class="source">公式来源：<a href="https://phys-sim-book.github.io/simulation-with-optimization/discrete-space-and-time/explicit_time_integration.html">原书 §1.4</a>、<a href="https://phys-sim-book.github.io/simulation-with-optimization/discrete-space-and-time/implicit_time_integration.html">§1.5</a>，这里取一维恒定质量形式。</p></section>
+<section><h2>同一个弹簧的一步对照</h2><p>旧 x = 1 m、旧 v = 0、m = 1 kg、f(x) = −4x、Δt = 0.1 s。</p>
+<table><thead><tr><th>方法</th><th>新位置（m）</th><th>新速度（m/s）</th></tr></thead><tbody><tr><td>前向 Euler</td><td>1.000000</td><td>−0.400000</td></tr><tr><td>辛 Euler</td><td>0.960000</td><td>−0.400000</td></tr><tr><td>后向 Euler</td><td>0.961538</td><td>−0.384615</td></tr></tbody></table>
+<p>前向 Euler 第一小步的位置仍为 1 m，是因为旧速度为零；连续模型中的物体在这段时间内已经移动。<a href="../lessons/0004-implicit-euler.html#euler-review">逐步代入说明见第四节回顾</a>。</p>
+<p class="note">采用新速度不会自动提高单步位置精度。相同步长的恒定正加速度算例中，前向与辛 Euler 的位置误差大小相同、方向相反。若力恒定，本页的辛 Euler 与后向 Euler 更新结果相同。</p><p>准确性与稳定性需要分别检查；能量有界波动不等于每一步精确守恒。</p></section>
+<footer><p><a href="../lessons/0002-forward-euler.html">第二节：前向 Euler</a> · <a href="../lessons/0003-symplectic-euler.html">第三节：辛 Euler</a> · <a href="../lessons/0004-implicit-euler.html#euler-review">第四节：三种公式回顾</a></p><p><a href="implicit-euler.html">隐式 Euler 与残差速查</a></p></footer></main></body></html>

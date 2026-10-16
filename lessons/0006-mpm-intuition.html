@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MPM 入门 · 粒子记材料，网格算运动</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <script src="../assets/mpm-lesson.js?v=2" defer></script>
+</head>
+<body class="topic-lesson mpm-page">
+<main>
+  <nav class="lesson-topbar"><a href="../index.html#day-2026-10-16">← 学习时间轴</a><span>2026-10-16 · 01 / 02 · MPM</span></nav>
+  <header>
+    <div class="eyebrow">MATERIAL POINT METHOD · 先看流程</div>
+    <h1>MPM：粒子记材料，<br>网格算运动</h1>
+    <p class="lead">想象一团沙子：用粒子记住每一小团材料，再借一张临时网格计算这一瞬间的受力和速度。</p>
+    <p class="meta">约 12 分钟 · 不需要微积分 · 今天不推弱形式</p>
+  </header>
+
+  <section class="card key-idea">
+    <h2>先记住一句话</h2>
+    <p class="big-idea"><strong>粒子是“记忆”，网格是“计算纸”。</strong></p>
+    <p>每个时间步都把信息写到网格上，算完再拿回粒子；网格本身不会跟着材料永久移动。</p>
+  </section>
+
+  <section>
+    <h2>01 / 为什么同时需要粒子和网格？</h2>
+    <div class="two-role-grid">
+      <article><div class="role-icon particle-icon">●</div><h3>粒子：跟着材料走</h3><p>保存质量、位置、速度、体积以及材料变形等历史。</p></article>
+      <article><div class="role-icon grid-icon">▦</div><h3>网格：临时做计算</h3><p>接收粒子信息，在规则节点上合力、更新速度并处理边界。</p></article>
+    </div>
+    <p class="note"><strong>直觉：</strong>粒子解决“材料是谁、现在在哪”，网格解决“这一小步应该怎样动”。</p>
+  </section>
+
+  <section class="card pipeline-lab">
+    <div class="section-kicker">可操作流程</div>
+    <h2>02 / 点四步，走完一个 MPM 时间步</h2>
+    <div class="mpm-stage" id="mpm-stage" data-stage="0" aria-live="polite">
+      <div class="mpm-grid-lines" aria-hidden="true"></div>
+      <i class="material-particle p1"></i><i class="material-particle p2"></i><i class="material-particle p3"></i><i class="material-particle p4"></i><i class="material-particle p5"></i>
+      <b class="grid-node n1"></b><b class="grid-node n2"></b><b class="grid-node n3"></b><b class="grid-node n4"></b><b class="grid-node n5"></b><b class="grid-node n6"></b>
+      <span class="motion-arrow">→</span>
+    </div>
+    <div class="pipeline-buttons" role="group" aria-label="MPM 四步">
+      <button type="button" data-mpm-stage="0"><span>1</span>P2G</button>
+      <button type="button" data-mpm-stage="1"><span>2</span>网格更新</button>
+      <button type="button" data-mpm-stage="2"><span>3</span>G2P</button>
+      <button type="button" data-mpm-stage="3"><span>4</span>粒子前进</button>
+    </div>
+    <div class="stage-explanation"><strong id="mpm-stage-title"></strong><p id="mpm-stage-text"></p></div>
+  </section>
+
+  <section>
+    <h2>03 / 只需认识这四个缩写</h2>
+    <div class="concept-strip">
+      <div><span>P2G</span><strong>Particle to Grid</strong><p>把粒子的质量、动量和力汇到附近网格节点。</p></div>
+      <div><span>Grid</span><strong>网格更新</strong><p>在节点上加重力、内力和边界条件，得到新速度。</p></div>
+      <div><span>G2P</span><strong>Grid to Particle</strong><p>把网格的新速度插值回粒子。</p></div>
+      <div><span>Move</span><strong>更新粒子</strong><p>粒子移动，并更新体积、变形等材料状态。</p></div>
+    </div>
+  </section>
+
+  <section class="card checkpoint">
+    <h2>04 / 一题过关</h2>
+    <p>在 MPM 中，哪一方负责长期保存材料状态？</p>
+    <div class="answer-buttons">
+      <button type="button" data-mpm-answer="particle">粒子</button>
+      <button type="button" data-mpm-answer="grid">背景网格</button>
+    </div>
+    <p id="mpm-feedback" class="feedback" aria-live="polite"></p>
+    <a id="mpm-next" class="primary-link disabled-link" href="0007-ipc-intuition.html" aria-disabled="true">完成本节，继续 IPC →</a>
+  </section>
+
+  <footer>
+    <p>原书入口：<a href="https://phys-sim-book.github.io/material-point-method/spatial-and-temporal-discretization/mpm_disc.html">MPM 空间与时间离散</a> · <a href="https://phys-sim-book.github.io/material-point-method/spatial-and-temporal-discretization/summary.html">四步流程总结</a></p>
+    <p class="meta">本页只建立结构化直觉；粒子应力、形变梯度、PIC/FLIP/APIC 差异留到后续。</p>
+  </footer>
+</main>
+</body>
+</html>

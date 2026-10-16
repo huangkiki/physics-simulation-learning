@@ -1,0 +1,12 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>隐式 Euler · 速查</title><link rel="stylesheet" href="../assets/style.css"></head><body><main>
+<header><div class="eyebrow">REFERENCE · 04</div><h1>后向 Euler 与求解</h1><p class="lead">限定为恒定质量、力只依赖位置的一维模型。多分量版本用质量矩阵。</p></header>
+<section><div class="formula">v<sub>new</sub> = v + Δt · f(x<sub>new</sub>)/m<br>x<sub>new</sub> = x + Δt · v<sub>new</sub></div><p><strong>力、新速度、新位置一起确定。</strong>把速度消去，得到只含新位置 z 的方程：</p><div class="formula">r(z) = z − x − Δt · v − Δt² · f(z)/m = 0</div><p>本卡的 r 采用位置单位。把它乘以质量 m，可得到与教材式 1.5.2 对应的形式；零点不变。</p><table><thead><tr><th>概念</th><th>用途</th></tr></thead><tbody><tr><td>离散方程</td><td>规定一步更新要满足什么关系</td></tr><tr><td>求解</td><td>找出满足关系的未知数</td></tr><tr><td>残差</td><td>候选值代入方程后剩下的差</td></tr><tr><td>时间离散误差</td><td>数值轨迹与连续模型精确轨迹的偏差</td></tr></tbody></table>
+<p>线性弹簧 f(z) = −kz 可直接求解：</p><div class="formula">z = (x + Δt · v)/(1 + Δt² · k/m)</div><p class="note">小残差说明所定义的方程满足得好；物理准确性还需要对照连续模型或独立参照。</p></section>
+<section><h2>精确参照：适用条件与来源</h2>
+<p>第四节另给了连续模型的精确解，用于检查时间离散误差。条件是无阻尼、运动方向只有线性弹簧力，m = 1 kg、k = 4 N/m，初始 x = 1 m、v = 0。</p>
+<div class="formula">x(t) = cos(2t)<br>v(t) = −2sin(2t)</div>
+<p>这里按秒、米记数，三角函数采用弧度。x(t) 表示 t 时刻的位置。数字 2 的来源是：cos(ct) 对时间连续求导两次得到 −c²cos(ct)，而弹簧方程要求 a = −(k/m)x，所以 c² = k/m，取正值得 c = √(k/m) = 2。它是角频率（rad/s）；本例一次往复约为 3.142 s。</p>
+<p class="note">这段用到了求导，是额外补充。Euler 的更新计算只需要力与状态的关系，不要求预先知道精确解。<a href="../lessons/0004-implicit-euler.html#spring-reference">返回逐步解释与时间代入表</a>。</p>
+<p class="source">补充来源：<a href="https://openstax.org/books/university-physics-volume-1/pages/15-1-simple-harmonic-motion">OpenStax §15.1，简谐运动及式 15.9</a>。</p>
+</section>
+<footer><p>来源：<a href="https://phys-sim-book.github.io/simulation-with-optimization/discrete-space-and-time/implicit_time_integration.html">原书 §1.5，式 1.5.1–1.5.2</a>；一维位置残差与弹簧闭式解由本卡据此推导。</p><p><a href="../lessons/0004-implicit-euler.html">← 返回第四节</a> · <a href="euler-methods.html">前向与辛 Euler 速查</a></p></footer></main></body></html>
