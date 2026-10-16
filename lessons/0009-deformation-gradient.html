@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>形变梯度 F · 材料的局部变形记忆</title>
+  <link rel="stylesheet" href="../assets/style.css?v=5">
+  <script src="../assets/deformation-gradient.js?v=1" defer></script>
+</head>
+<body class="topic-lesson">
+<main>
+  <nav class="lesson-topbar"><a href="../index.html#learning-plan">← 学习计划</a><span>进阶课 · 04 / 06 · 形变</span></nav>
+  <header>
+    <div class="eyebrow">DEFORMATION GRADIENT · 先会读图</div>
+    <h1>形变梯度 F：<br>这一小块材料变成了什么样？</h1>
+    <p class="lead">把粒子附近想成一个小方块。F 记录这个方块相对原始形状发生的拉伸、剪切和旋转。</p>
+    <p class="meta">约 15 分钟 · 今天只会“看” F，不要求算矩阵</p>
+  </header>
+
+  <section class="card key-idea">
+    <h2>先记住一句话</h2>
+    <p class="big-idea"><strong>位置告诉你材料在哪；F 告诉你材料局部变成什么样。</strong></p>
+  </section>
+
+  <section class="card deformation-lab">
+    <div class="section-kicker">点选形变</div>
+    <h2>01 / 把参考方块变成当前形状</h2>
+    <div class="deformation-stage">
+      <div class="reference-shape"><span>原始形状</span></div>
+      <div class="transform-arrow">→</div>
+      <div class="current-shape-wrap"><div id="deformation-shape" class="deformation-shape"><span>当前形状</span></div></div>
+    </div>
+    <div class="mode-buttons" role="group" aria-label="形变类型">
+      <button type="button" data-deformation="identity">不变</button><button type="button" data-deformation="stretch">拉伸</button><button type="button" data-deformation="shear">剪切</button><button type="button" data-deformation="rotate">旋转</button>
+    </div>
+    <div class="matrix-readout"><div><span>示意矩阵 F</span><strong id="deformation-matrix"></strong></div><p id="deformation-text"></p></div>
+  </section>
+
+  <section class="card gentle-card">
+    <h2>02 / F 为什么重要？</h2>
+    <div class="reason-row"><span>F 记录形变</span><b>→</b><span>材料模型算应力</span><b>→</b><span>应力产生内部力</span></div>
+    <p>同样的位置和速度，如果 F 不同，材料内部可能处在完全不同的受力状态。</p>
+  </section>
+
+  <section class="card checkpoint">
+    <h2>03 / 一题过关</h2>
+    <p>在 MPM 粒子状态中，哪一个量主要记录局部拉伸、剪切和旋转？</p>
+    <div class="answer-buttons"><button type="button" data-deformation-answer="velocity">速度 v</button><button type="button" data-deformation-answer="gradient">形变梯度 F</button></div>
+    <p id="deformation-feedback" class="feedback" aria-live="polite"></p>
+    <a id="deformation-next" class="primary-link disabled-link" href="0010-elasticity-plasticity.html" aria-disabled="true">继续：弹性与塑性 →</a>
+  </section>
+
+  <footer><p>原书入口：<a href="https://phys-sim-book.github.io/material-point-method/spatial-and-temporal-discretization/particle_state_update.html">Particle State Update</a></p><p class="meta">真实计算会用速度梯度更新 F；这里先建立“局部形变记忆”的直觉。</p></footer>
+</main>
+</body>
+</html>

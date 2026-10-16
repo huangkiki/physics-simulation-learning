@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PIC / FLIP / APIC · 三种传输直觉</title>
+  <link rel="stylesheet" href="../assets/style.css?v=5">
+  <script src="../assets/transfer-schemes.js?v=1" defer></script>
+</head>
+<body class="topic-lesson">
+<main>
+  <nav class="lesson-topbar"><a href="../index.html#learning-plan">← 学习计划</a><span>进阶课 · 03 / 06 · 传输</span></nav>
+  <header>
+    <div class="eyebrow">PARTICLE–GRID TRANSFER · 三种选择</div>
+    <h1>PIC / FLIP / APIC：<br>粒子怎样拿回网格速度？</h1>
+    <p class="lead">它们都在做 G2P，但“拿回什么”不同，因此稳定性、细节和旋转保真度也不同。</p>
+    <p class="meta">约 15 分钟 · 先比较现象，不推插值公式</p>
+  </header>
+
+  <section class="card key-idea">
+    <h2>先记住一句话</h2>
+    <p class="big-idea"><strong>PIC 更稳，FLIP 更活，APIC 更会记局部旋转。</strong></p>
+    <p>没有绝对最好的传输法；要看材料、噪声和你想保留的运动细节。</p>
+  </section>
+
+  <section class="card transfer-lab">
+    <div class="section-kicker">切换比较</div>
+    <h2>01 / 同一团旋转粒子，换一种传输方式</h2>
+    <div id="transfer-stage" class="transfer-stage" data-scheme="pic" aria-live="polite">
+      <div class="transfer-grid" aria-hidden="true"></div>
+      <div class="orbit orbit-a"><i></i></div><div class="orbit orbit-b"><i></i></div><div class="orbit orbit-c"><i></i></div><div class="orbit orbit-d"><i></i></div>
+      <div class="spin-arrow" aria-hidden="true">↻</div>
+    </div>
+    <div class="scheme-switcher" role="group" aria-label="传输方式">
+      <button type="button" data-transfer-scheme="pic">PIC</button>
+      <button type="button" data-transfer-scheme="flip">FLIP</button>
+      <button type="button" data-transfer-scheme="apic">APIC</button>
+    </div>
+    <div class="scheme-readout"><strong id="scheme-title"></strong><p id="scheme-text"></p><div class="tradeoff-bars"><span>稳定 <i id="stable-bar"></i></span><span>细节 <i id="detail-bar"></i></span><span>旋转 <i id="rotation-bar"></i></span></div></div>
+  </section>
+
+  <section class="three-choice-grid">
+    <article><strong>PIC</strong><p>直接用网格插值得到新速度。平滑、稳定，但容易耗散运动细节。</p></article>
+    <article><strong>FLIP</strong><p>把网格速度的“变化量”加回粒子。细节保留多，也更容易积累噪声。</p></article>
+    <article><strong>APIC</strong><p>除平移速度外，还让粒子携带局部仿射速度，能更好保留旋转。</p></article>
+  </section>
+
+  <section class="card checkpoint">
+    <h2>02 / 一题过关</h2>
+    <p>一团材料在旋转，你想保留局部旋转，同时比纯 FLIP 更稳，优先考虑哪一个？</p>
+    <div class="answer-buttons"><button type="button" data-transfer-answer="pic">PIC</button><button type="button" data-transfer-answer="flip">FLIP</button><button type="button" data-transfer-answer="apic">APIC</button></div>
+    <p id="transfer-feedback" class="feedback" aria-live="polite"></p>
+    <a id="transfer-next" class="primary-link disabled-link" href="0009-deformation-gradient.html" aria-disabled="true">继续：形变梯度 F →</a>
+  </section>
+
+  <footer><p>原书入口：<a href="https://phys-sim-book.github.io/material-point-method/spatial-and-temporal-discretization/euler_lag_transfers.html">Particle–Grid Transfers</a></p><p class="meta">本页把三种方法压缩成选择直觉；权重、动量守恒和仿射矩阵推导留到以后。</p></footer>
+</main>
+</body>
+</html>

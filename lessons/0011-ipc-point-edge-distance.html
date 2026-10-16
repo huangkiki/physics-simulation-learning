@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>IPC 点—边距离 · 最近点在哪里</title>
+  <link rel="stylesheet" href="../assets/style.css?v=5">
+  <script src="../assets/point-edge-distance.js?v=1" defer></script>
+</head>
+<body class="topic-lesson">
+<main>
+  <nav class="lesson-topbar"><a href="../index.html#learning-plan">← 学习计划</a><span>进阶课 · 06 / 06 · 接触几何</span></nav>
+  <header>
+    <div class="eyebrow">POINT–EDGE DISTANCE · 最近点判断</div>
+    <h1>IPC 点—边距离：<br>最近的是线段内部，还是端点？</h1>
+    <p class="lead">屏障需要一个可靠距离。对“一个点”和“一条有限线段”，先投影，再判断投影是否在线段内部。</p>
+    <p class="meta">约 15 分钟 · 只做二维几何直觉</p>
+  </header>
+
+  <section class="card key-idea ipc-key">
+    <h2>先记住一句话</h2>
+    <p class="big-idea"><strong>投影在线段内，用点—线距离；投影跑出去，用最近端点距离。</strong></p>
+  </section>
+
+  <section class="card point-edge-lab">
+    <div class="section-kicker">拖动坐标</div>
+    <h2>01 / 看最近点在何处切换</h2>
+    <svg id="point-edge-svg" class="point-edge-svg" viewBox="0 0 620 260" role="img" aria-label="点到线段的最近距离示意">
+      <line x1="120" y1="190" x2="500" y2="190" class="edge-line"/>
+      <circle cx="120" cy="190" r="8" class="edge-end"/><circle cx="500" cy="190" r="8" class="edge-end"/>
+      <line id="distance-line" class="nearest-line"/>
+      <circle id="closest-point" r="7" class="closest-point"/>
+      <circle id="moving-point" r="11" class="moving-point"/>
+      <text x="102" y="220">端点 A</text><text x="482" y="220">端点 B</text><text id="point-label">点 P</text>
+    </svg>
+    <div class="coordinate-controls">
+      <label>左右位置<input id="point-x" type="range" min="60" max="560" value="310"></label>
+      <label>上下距离<input id="point-y" type="range" min="30" max="170" value="90"></label>
+    </div>
+    <div class="distance-stats"><div><span>最近距离</span><strong id="point-edge-distance">0</strong></div><div><span>最近位置</span><strong id="closest-kind">线段内部</strong></div><p id="point-edge-explanation"></p></div>
+  </section>
+
+  <section class="card gentle-card">
+    <h2>02 / 这和 IPC 屏障有什么关系？</h2>
+    <p>接触检测会为可能碰撞的几何元素计算距离。距离进入激活范围后，IPC 才加入屏障；而最近点的类型决定距离公式使用哪一段。</p>
+  </section>
+
+  <section class="card checkpoint">
+    <h2>03 / 一题过关</h2>
+    <p>点在线段左侧，垂直投影落在线段范围之外，此时最近距离应该量到哪里？</p>
+    <div class="answer-buttons stacked-answers"><button type="button" data-point-edge-answer="endpoint">量到左端点</button><button type="button" data-point-edge-answer="infinite">仍量到无限延长线</button></div>
+    <p id="point-edge-feedback" class="feedback" aria-live="polite"></p>
+    <a id="point-edge-finish" class="primary-link disabled-link" href="../index.html#learning-plan" aria-disabled="true">完成进阶课，回到学习计划 →</a>
+  </section>
+
+  <footer><p>原书入口：<a href="https://phys-sim-book.github.io/finite-element-method/piecewise-linear-boundaries/self_contact.html">Self Contact</a> · <a href="https://phys-sim-book.github.io/finite-element-method/case-study-2d-self-contact/2d_self_contact.html">2D Point–Edge Implementation</a></p><p class="meta">三维 IPC 还会处理点—三角形和边—边距离；判断思路仍是寻找有限几何元素上的最近点。</p></footer>
+</main>
+</body>
+</html>

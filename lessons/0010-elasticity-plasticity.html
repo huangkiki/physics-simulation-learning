@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>弹性与塑性 · 卸载后会不会恢复</title>
+  <link rel="stylesheet" href="../assets/style.css?v=5">
+  <script src="../assets/material-memory.js?v=1" defer></script>
+</head>
+<body class="topic-lesson">
+<main>
+  <nav class="lesson-topbar"><a href="../index.html#learning-plan">← 学习计划</a><span>进阶课 · 05 / 06 · 材料</span></nav>
+  <header>
+    <div class="eyebrow">ELASTICITY & PLASTICITY · 看卸载结果</div>
+    <h1>弹性与塑性：<br>力撤掉以后，材料还记得吗？</h1>
+    <p class="lead">橡皮筋会恢复，湿黏土会留下形变。区别要在“卸载以后”看，而不是只看加载时变了多少。</p>
+    <p class="meta">约 15 分钟 · 不推本构方程和返回映射</p>
+  </header>
+
+  <section class="card key-idea">
+    <h2>先记住一句话</h2>
+    <p class="big-idea"><strong>弹性形变可恢复；超过屈服后的塑性形变会留下。</strong></p>
+  </section>
+
+  <section class="card material-lab">
+    <div class="section-kicker">加载再卸载</div>
+    <h2>01 / 同时拉伸两种材料</h2>
+    <label class="load-control" for="material-load">加载程度 <output id="material-load-value">0%</output></label>
+    <input id="material-load" class="wide-range" type="range" min="0" max="100" value="0">
+    <button id="unload-material" class="secondary-button" type="button">卸载到 0</button>
+    <div class="material-pair">
+      <article><h3>弹性材料</h3><div class="sample-track"><div id="elastic-sample" class="material-sample elastic-sample"></div></div><strong id="elastic-state">原始形状</strong><p>加载时变形，卸载后回到原状。</p></article>
+      <article><h3>塑性材料</h3><div class="sample-track"><div id="plastic-sample" class="material-sample plastic-sample"></div><i class="yield-mark">屈服</i></div><strong id="plastic-state">原始形状</strong><p>超过屈服线后，卸载仍保留一部分永久形变。</p></article>
+    </div>
+  </section>
+
+  <section class="card gentle-card">
+    <h2>02 / 在 MPM 里意味着什么？</h2>
+    <p>材料模型读取 F，并决定其中多少是可恢复的弹性部分，多少成为永久的塑性部分。沙、雪、金属和橡胶会给出不同规则。</p>
+    <p class="note"><strong>屈服点：</strong>从“还能完全恢复”跨到“会留下永久形变”的门槛。</p>
+  </section>
+
+  <section class="card checkpoint">
+    <h2>03 / 一题过关</h2>
+    <p>材料被压过屈服点，卸载后仍然保持扁形，这主要是哪一种行为？</p>
+    <div class="answer-buttons"><button type="button" data-material-answer="elastic">弹性</button><button type="button" data-material-answer="plastic">塑性</button></div>
+    <p id="material-feedback" class="feedback" aria-live="polite"></p>
+    <a id="material-next" class="primary-link disabled-link" href="0011-ipc-point-edge-distance.html" aria-disabled="true">继续：IPC 点—边距离 →</a>
+  </section>
+
+  <footer><p>原书入口：<a href="https://phys-sim-book.github.io/material-point-method/case-study-plastic-material-models/mpm_plastic_models.html">MPM Plastic Material Models</a></p><p class="meta">后续可继续学弹塑性分解、屈服面和返回映射；本节只建立卸载直觉。</p></footer>
+</main>
+</body>
+</html>

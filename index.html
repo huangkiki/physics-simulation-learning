@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>物理仿真学习时间轴</title>
-  <link rel="stylesheet" href="assets/style.css?v=3">
-  <script src="assets/today-learning.js?v=3" defer></script>
+  <link rel="stylesheet" href="assets/style.css?v=5">
+  <script src="assets/today-learning.js?v=5" defer></script>
 </head>
 <body class="focus-page">
 <main class="focus-shell">
@@ -18,7 +18,7 @@
       </div>
       <div class="today-progress" aria-live="polite">
         <span>累计学习进度</span>
-        <strong id="overall-progress-number">0 / 80 分钟</strong>
+        <strong id="overall-progress-number">0 / 140 分钟</strong>
         <div class="progress-track"><i id="overall-progress-bar"></i></div>
         <small id="overall-progress-text">从昨天的基础开始</small>
       </div>
@@ -30,7 +30,7 @@
       <div class="timeline-rail" aria-hidden="true"><i></i></div>
       <div class="timeline-content">
         <header class="day-header">
-          <div><span class="date-label">2026 年 10 月 16 日 · 今天</span><h2>MPM 与 IPC：材料运动和接触</h2><p>今天只建立流程直觉，不推 Newton、矩阵和 Hessian。</p></div>
+          <div><span class="date-label">2026 年 10 月 16 日 · 今天</span><h2>MPM 与 IPC：材料运动和接触</h2><p>今天只建立总流程直觉，不推 Newton、矩阵和 Hessian。</p></div>
           <div class="day-progress"><strong data-day-progress="2026-10-16">0 / 24 分钟</strong><span data-day-status="2026-10-16">2 节待学习</span></div>
         </header>
 
@@ -68,6 +68,49 @@
             <div><span class="role-label ipc-label">IPC</span><strong>负责物体接触</strong><p>表面何时靠近、怎样避免相互穿透。</p></div>
             <div class="equals-sign">=</div>
             <div class="result-role"><strong>可信的运动与接触</strong><p>它们解决不同问题，可以出现在同一套仿真中。</p></div>
+          </div>
+        </section>
+
+      </div>
+    </article>
+
+    <article class="timeline-day plan-day" id="learning-plan">
+      <div class="timeline-rail" aria-hidden="true"><i></i></div>
+      <div class="timeline-content">
+        <section class="advanced-section" aria-labelledby="advanced-title">
+          <div class="advanced-heading">
+            <div><span class="date-label">自主安排</span><h2 id="advanced-title">接下来可以学的四个小课</h2></div>
+            <p>每节约 15 分钟。选择你想完成的时间，计划会保存在这个浏览器里。</p>
+          </div>
+          <div class="advanced-grid">
+            <article class="advanced-card" data-progress-card="transfers">
+              <div class="advanced-card-top"><span>03 · 粒子—网格传输</span><span class="completion-mark" data-completion="transfers">未完成</span></div>
+              <h3>PIC / FLIP / APIC 有什么区别？</h3>
+              <p>比较稳定、细节和局部旋转怎样取舍。</p>
+              <label class="schedule-control">计划完成时间<input type="datetime-local" data-schedule-input="transfers"><small data-schedule-status="transfers">尚未安排</small></label>
+              <div class="card-actions"><a href="lessons/0008-pic-flip-apic.html">开始学习 →</a><button class="completion-toggle" type="button" data-progress-toggle="transfers">标记完成</button></div>
+            </article>
+            <article class="advanced-card" data-progress-card="deformation">
+              <div class="advanced-card-top"><span>04 · 形变记忆</span><span class="completion-mark" data-completion="deformation">未完成</span></div>
+              <h3>形变梯度 F 在记什么？</h3>
+              <p>用一个方块读懂拉伸、剪切和旋转。</p>
+              <label class="schedule-control">计划完成时间<input type="datetime-local" data-schedule-input="deformation"><small data-schedule-status="deformation">尚未安排</small></label>
+              <div class="card-actions"><a href="lessons/0009-deformation-gradient.html">开始学习 →</a><button class="completion-toggle" type="button" data-progress-toggle="deformation">标记完成</button></div>
+            </article>
+            <article class="advanced-card" data-progress-card="materials">
+              <div class="advanced-card-top"><span>05 · 材料响应</span><span class="completion-mark" data-completion="materials">未完成</span></div>
+              <h3>弹性与塑性：卸载后会怎样？</h3>
+              <p>亲手加载再卸载，看材料会不会恢复原状。</p>
+              <label class="schedule-control">计划完成时间<input type="datetime-local" data-schedule-input="materials"><small data-schedule-status="materials">尚未安排</small></label>
+              <div class="card-actions"><a href="lessons/0010-elasticity-plasticity.html">开始学习 →</a><button class="completion-toggle" type="button" data-progress-toggle="materials">标记完成</button></div>
+            </article>
+            <article class="advanced-card" data-progress-card="point-edge">
+              <div class="advanced-card-top"><span>06 · 接触几何</span><span class="completion-mark" data-completion="point-edge">未完成</span></div>
+              <h3>IPC 怎样计算点—边距离？</h3>
+              <p>拖动一个点，观察最近位置何时落在线段或端点。</p>
+              <label class="schedule-control">计划完成时间<input type="datetime-local" data-schedule-input="point-edge"><small data-schedule-status="point-edge">尚未安排</small></label>
+              <div class="card-actions"><a href="lessons/0011-ipc-point-edge-distance.html">开始学习 →</a><button class="completion-toggle" type="button" data-progress-toggle="point-edge">标记完成</button></div>
+            </article>
           </div>
         </section>
       </div>

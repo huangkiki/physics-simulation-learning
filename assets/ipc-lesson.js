@@ -41,7 +41,7 @@ document.querySelectorAll("[data-ipc-answer]").forEach(button => {
       finish.classList.remove("disabled-link");
       finish.removeAttribute("aria-disabled");
       inheritedProgress.add("ipc");
-      finish.href = `../index.html?completed=${[...inheritedProgress].join(",")}#day-2026-10-16`;
+      finish.href = `0008-pic-flip-apic.html?completed=${[...inheritedProgress].join(",")}`;
       try {
         const progress = JSON.parse(localStorage.getItem("physics-learning-today-v2")) || {};
         progress.ipc = true;
